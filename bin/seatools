@@ -53,8 +53,8 @@ commander
     } else if(sub.http) {
       test.runHttp();
     } else {
-      //test.runLocal();
-      //test.runHttp();
+      test.runLocal();
+      test.runHttp();
     }
   });
 
