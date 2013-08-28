@@ -36,11 +36,7 @@ module.exports = function(grunt) {
           'dist/sea.js': ['dist/sea-debug.js']
         },
         options: {
-          banner: '/*! Sea.js <%= pkg.version %> | seajs.org/LICENSE.md\n' +
-              '//@ sourceMappingURL=sea.js.map\n*/\n',
-          sourceMap: 'dist/sea.js.map',
-          sourceMappingURL: 'sea.js.map',
-          //report: 'gzip',
+          banner: '/*! Sea.js <%= pkg.version %> | seajs.org/LICENSE.md */\n',
           compress: {
             unsafe: true,
             unused: false
