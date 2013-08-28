@@ -1,6 +1,7 @@
 {
   "name": "seatools",
   "version": "0.1.0",
+  "author": "popomore <a@chuo.me>",
   "description": "Seajs helpers that can build, debug and test.",
   "dependencies": {
     "commander": "~1.1.1",
