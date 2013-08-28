@@ -30,7 +30,12 @@ commander
   .description('site')
   .option('-w, --watch', 'Show more infomation.')
   .action(function(){
-    grunt.invoke('site');
+    var sub = this.args[0];
+    if (sub.watch) {
+      grunt.invoke('site-watch');
+    } else {
+      grunt.invoke('site');
+    }
   });
 
 commander
