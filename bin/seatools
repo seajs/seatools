@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 var commander = require('commander');
+var grunt = require('../lib/grunt');
 
 commander
   .version(require('../package.json').version)
@@ -13,10 +14,35 @@ commander.on('--help', function() {
   console.log('    seatools');
   console.log();
 });
+
+commander
+  .command('build')
+  .description('build')
+  .action(function(){
+    require('../lib/grunt').invoke('build');
+  });
+
+commander
+  .command('size')
+  .description('size')
+  .action(function(){
+    require('../lib/grunt').invoke('size');
+  });
+
+commander
+  .command('test')
+  .description('test')
+  .action(function(){
+    require('../lib/grunt').invoke('size');
+  });
+
 commander.parse(process.argv);
 
-var url = commander.args[0];
-if (!commander.args[0]) {
+var isExist = !commander.commands.every(function(item) {
+  return item !== commander.args[0];
+});
+
+if (!isExist) {
   process.stdout.write(commander.helpInformation());
   commander.emit('--help');
   process.exit();
