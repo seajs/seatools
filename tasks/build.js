@@ -32,7 +32,7 @@ module.exports = function(grunt) {
   grunt.registerTask("size", "Get file size", function() {
     var path = require('path');
     var exec = require('child_process').exec;
-    var cmd = path.join(__dirname, '../lib/size.sh') + ' sea';
+    var cmd = path.join(__dirname, '../lib/tools/size.sh') + ' sea';
     var done = this.async();
     exec(cmd, {
       cwd: path.resolve('.'),
