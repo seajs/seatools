@@ -26,6 +26,14 @@ commander
   });
 
 commander
+  .command('site')
+  .description('site')
+  .option('-w, --watch', 'Show more infomation.')
+  .action(function(){
+    
+  });
+
+commander
   .command('test')
   .description('test')
   .option('--local', 'Show more infomation.')
@@ -36,7 +44,7 @@ commander
     if (sub.totoro) {
       test.runTotoro();
     } else if(sub.local) {
-      //test.runLocal();
+      test.runLocal();
     } else if(sub.http) {
       test.runHttp();
     } else {
