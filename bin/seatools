@@ -38,7 +38,7 @@ commander
     } else if(sub.local) {
       //test.runLocal();
     } else if(sub.http) {
-      //test.runHttp();
+      test.runHttp();
     } else {
       //test.runLocal();
       //test.runHttp();
