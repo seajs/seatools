@@ -41,15 +41,46 @@ module.exports = function(grunt) {
           }
         }
       }
+    },
+
+    copy: {
+      seajs: {
+        expand: true,
+        cwd: './',
+        src: [
+          'dist/**/*',
+          'src/**/*',
+          'tests/**/*',
+          'examples/**/*'
+        ],
+        dest: '_site/'
+      },
+
+      template: {
+        expand: true,
+        cwd: path.join(__dirname, 'lib', 'template'),
+        src: '**/*',
+        dest: '_site/tests/'
+      }
+    },
+
+    clean: {
+      site: '_site/'
     }
   });
 
-  // Load grunt tasks from NPM packages
+  loadTasks('grunt-contrib-concat');
+  loadTasks('grunt-contrib-uglify');
+  loadTasks('grunt-contrib-copy');
+  loadTasks('grunt-contrib-clean');
   grunt.loadTasks(path.join(__dirname, 'tasks'));
-
-  grunt.loadTasks(path.join(__dirname, 'node_modules', 'grunt-contrib-concat', 'tasks'));
-  grunt.loadTasks(path.join(__dirname, 'node_modules', 'grunt-contrib-uglify', 'tasks'));
 
   grunt.registerTask('build', ['concat', 'post-concat', 'uglify', 'post-uglify', 'size']);
   grunt.registerTask('test', ['totoro']);
+  grunt.registerTask('site', ['clean:site', 'copy:seajs', 'copy:template']);
+
+  function loadTasks(name) {
+    var task = path.join(__dirname, 'node_modules', name, 'tasks');
+    grunt.loadTasks(task);
+  }
 };
