@@ -2,38 +2,47 @@
 
 var commander = require('commander');
 var grunt = require('../lib/grunt');
+var test = require('../lib/test');
 
 commander
   .version(require('../package.json').version)
-  .option('-v, --verbose', 'Show more infomation.');
-
-commander.on('--help', function() {
-  console.log();
-  console.log('  Example');
-  console.log();
-  console.log('    seatools');
-  console.log();
-});
+  .option('-v, --verbose', 'Show more infomation.')
+  .option('-d, --debug', 'Show more infomation.')
+  .option('--stack', 'Show more infomation.')
+  .option('-f, --force', 'Show more infomation.');
 
 commander
   .command('build')
   .description('build')
   .action(function(){
-    require('../lib/grunt').invoke('build');
+    grunt.invoke('build');
   });
 
 commander
   .command('size')
   .description('size')
   .action(function(){
-    require('../lib/grunt').invoke('size');
+    grunt.invoke('size');
   });
 
 commander
   .command('test')
   .description('test')
+  .option('--local', 'Show more infomation.')
+  .option('--http', 'Show more infomation.')
+  .option('--totoro', 'Show more infomation.')
   .action(function(){
-    require('../lib/grunt').invoke('size');
+    var sub = this.args[0];
+    if (sub.totoro) {
+      test.runTotoro();
+    } else if(sub.local) {
+      //test.runLocal();
+    } else if(sub.http) {
+      //test.runHttp();
+    } else {
+      //test.runLocal();
+      //test.runHttp();
+    }
   });
 
 commander.parse(process.argv);

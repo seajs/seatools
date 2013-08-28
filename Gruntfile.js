@@ -46,8 +46,10 @@ module.exports = function(grunt) {
 
   // Load grunt tasks from NPM packages
   grunt.loadTasks(path.join(__dirname, 'tasks'));
-  grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
+
+  grunt.loadTasks(path.join(__dirname, 'node_modules', 'grunt-contrib-concat', 'tasks'));
+  grunt.loadTasks(path.join(__dirname, 'node_modules', 'grunt-contrib-uglify', 'tasks'));
 
   grunt.registerTask('build', ['concat', 'post-concat', 'uglify', 'post-uglify', 'size']);
+  grunt.registerTask('test', ['totoro']);
 };
