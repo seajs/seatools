@@ -1,17 +1,11 @@
 {
   "name": "seatools",
-  "version": "1.0.0",
-  "description": "The best project ever.",
+  "version": "0.1.0",
+  "description": "Seajs helpers that can build, debug and test.",
   "dependencies": {
-    "commander": "~1.1.1"
-  },
-  "devDependencies": {
-    "mocha": "~1.8.1",
-    "should": "~1.1.0",
-    "mocha-lcov-reporter": "~0.0.1",
-    "coveralls": "~2.0.7",
-    "blanket": "~1.1.4",
-
+    "commander": "~1.1.1",
+    "totoro": "~0.3.0",
+    "node-static": "~0.6.9",
     "grunt": "~0.4.1",
     "grunt-contrib-concat": "~0.3.0",
     "grunt-contrib-uglify": "~0.2.2",
@@ -19,14 +13,8 @@
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-watch": "~0.5.3",
     "grunt-contrib-connect": "~0.3.0",
-    "connect-livereload": " ~0.2.0",
-    "totoro": "~0.3.0",
-    "node-static": "~0.6.9"
+    "connect-livereload": " ~0.2.0"
   },
-  "scripts": {
-    "test": "make test"
-  },
-  "main": "./index.js",
   "bin": {
     "seatools": "bin/seatools"
   }
