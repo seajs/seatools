@@ -6,29 +6,26 @@ var test = require('../lib/test');
 
 commander
   .version(require('../package.json').version)
-  .option('-v, --verbose', 'Show more infomation.')
-  .option('-d, --debug', 'Show more infomation.')
-  .option('--stack', 'Show more infomation.')
-  .option('-f, --force', 'Show more infomation.');
+  .option('-v, --verbose', 'Show more infomation.');
 
 commander
   .command('build')
-  .description('build')
+  .description('Build seajs')
   .action(function(){
     grunt.invoke('build');
   });
 
 commander
   .command('size')
-  .description('size')
+  .description('Get seajs file size')
   .action(function(){
     grunt.invoke('size');
   });
 
 commander
   .command('site')
-  .description('site')
-  .option('-w, --watch', 'Show more infomation.')
+  .description('Generate site and debug')
+  .option('-w, --watch', 'Start a watch server')
   .action(function(){
     var sub = this.args[0];
     if (sub.watch) {
@@ -40,10 +37,10 @@ commander
 
 commander
   .command('test')
-  .description('test')
-  .option('--local', 'Show more infomation.')
-  .option('--http', 'Show more infomation.')
-  .option('--totoro', 'Show more infomation.')
+  .description('Test seajs')
+  .option('--local', 'Test seajs using phantom')
+  .option('--http', 'Test seajs using phantom with server')
+  .option('--totoro', 'Test seajs using totoro')
   .action(function(){
     var sub = this.args[0];
     if (sub.totoro) {
