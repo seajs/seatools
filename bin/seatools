@@ -1,0 +1,23 @@
+#!/usr/bin/env node
+
+var commander = require('commander');
+
+commander
+  .version(require('../package.json').version)
+  .option('-v, --verbose', 'Show more infomation.');
+
+commander.on('--help', function() {
+  console.log();
+  console.log('  Example');
+  console.log();
+  console.log('    seatools');
+  console.log();
+});
+commander.parse(process.argv);
+
+var url = commander.args[0];
+if (!commander.args[0]) {
+  process.stdout.write(commander.helpInformation());
+  commander.emit('--help');
+  process.exit();
+}
