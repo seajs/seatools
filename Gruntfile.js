@@ -1,5 +1,6 @@
 module.exports = function(grunt) {
   var path = require('path');
+  var pkg = grunt.file.readJSON('package.json');
   var src = [
     'index.html',
     'docs/**/*',
@@ -10,7 +11,7 @@ module.exports = function(grunt) {
   ];
 
   grunt.initConfig({
-    pkg: grunt.file.readJSON('package.json'),
+    pkg: pkg,
 
     concat: {
       dist: {
@@ -31,7 +32,7 @@ module.exports = function(grunt) {
     },
 
     uglify: {
-      all: {
+      seajs: {
         files: {
           'dist/sea.js': ['dist/sea-debug.js']
         },
@@ -106,7 +107,7 @@ module.exports = function(grunt) {
   loadSubTasks('grunt-contrib-connect');
   grunt.loadTasks(path.join(__dirname, 'tasks'));
 
-  grunt.registerTask('build', ['concat', 'post-concat', 'uglify', 'post-uglify', 'size']);
+  grunt.registerTask('build', ['concat', 'post-concat', 'uglify:seajs', 'post-uglify', 'size']);
   grunt.registerTask('test', ['totoro']);
   grunt.registerTask('site', ['clean:site', 'copy', 'meta']);
   grunt.registerTask('site-watch', ['site', 'connect', 'watch']);
