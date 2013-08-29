@@ -90,7 +90,7 @@ module.exports = function(grunt) {
       },
       template: {
         files: src,
-        tasks: ['copy'],
+        tasks: ['copy', 'meta'],
         options: {
           livereload: true
         }

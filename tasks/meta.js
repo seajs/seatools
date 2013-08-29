@@ -10,7 +10,7 @@ module.exports = function(grunt) {
         return /test.html$/.test(item);
       }).map(function(item) {
         return item
-          .replace(path.resolve('./tests'), '')
+          .replace(path.resolve('./tests') + '/', '')
           .replace('/test.html', '')
           .replace(/^|$/g, '"');
       });
