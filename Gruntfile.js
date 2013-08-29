@@ -71,6 +71,7 @@ module.exports = function(grunt) {
       server: {
         options: {
           port: 8000,
+          hostname: '*',
           base: '_site',
           middleware: function(connect, options) {
             return [
