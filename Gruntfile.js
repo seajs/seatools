@@ -108,7 +108,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('build', ['concat', 'post-concat', 'uglify', 'post-uglify', 'size']);
   grunt.registerTask('test', ['totoro']);
-  grunt.registerTask('site', ['clean:site', 'copy']);
+  grunt.registerTask('site', ['clean:site', 'copy', 'meta']);
   grunt.registerTask('site-watch', ['site', 'connect', 'watch']);
 
   function loadSubTasks(name) {
