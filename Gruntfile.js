@@ -13,41 +13,6 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: pkg,
 
-    concat: {
-      dist: {
-        src: [
-          'src/intro.js',
-          'src/sea.js',
-          'src/util-lang.js',
-          'src/util-events.js',
-          'src/util-path.js',
-          'src/util-request.js',
-          'src/util-deps.js',
-          'src/module.js',
-          'src/config.js',
-          'src/outro.js'
-        ],
-        dest: 'dist/sea-debug.js'
-      }
-    },
-
-    uglify: {
-      seajs: {
-        files: {
-          'dist/sea.js': ['dist/sea-debug.js']
-        },
-        options: {
-          banner: '/*! Sea.js <%= pkg.version %> | seajs.org/LICENSE.md */\n',
-          compress: {
-            unsafe: true,
-            unused: false
-          },
-          mangle: {
-          }
-        }
-      }
-    },
-
     copy: {
       seajs: {
         expand: true,
@@ -107,13 +72,151 @@ module.exports = function(grunt) {
   loadSubTasks('grunt-contrib-connect');
   grunt.loadTasks(path.join(__dirname, 'tasks'));
 
-  grunt.registerTask('build', ['concat', 'post-concat', 'uglify:seajs', 'post-uglify', 'size']);
+  if (/^seajs-/.test(pkg.name)) {
+    buildSeajsPlugin();
+  } else {
+    buildSeajs();
+  }
   grunt.registerTask('test', ['totoro']);
   grunt.registerTask('site', ['clean:site', 'copy', 'meta']);
   grunt.registerTask('site-watch', ['site', 'connect', 'watch']);
 
+  function buildSeajs() {
+    grunt.util._.merge(grunt.config.data, {
+      concat: {
+        dist: {
+          src: [
+            'src/intro.js',
+            'src/sea.js',
+            'src/util-lang.js',
+            'src/util-events.js',
+            'src/util-path.js',
+            'src/util-request.js',
+            'src/util-deps.js',
+            'src/module.js',
+            'src/config.js',
+            'src/outro.js'
+          ],
+          dest: 'dist/sea-debug.js'
+        }
+      },
+
+      uglify: {
+        seajs: {
+          files: {
+            'dist/sea.js': ['dist/sea-debug.js']
+          },
+          options: {
+            banner: '/*! Sea.js <%= pkg.version %> | seajs.org/LICENSE.md */\n',
+            compress: {
+              unsafe: true,
+              unused: false
+            }
+          }
+        }
+      }
+    });
+    grunt.registerTask('build', [
+      'concat',
+      'post-concat',
+      'uglify:seajs',
+      'post-uglify',
+      'size'
+    ]);
+  }
+
+  function buildSeajsPlugin() {
+    var build = require('spm-build');
+    var options = build.parseOptions();
+    var config = build.getConfig(options);
+    grunt.util._.merge(grunt.config.data, config);
+    grunt.util._.merge(grunt.config.data, {
+      appenduse: {
+        options: {
+          idleading: [pkg.family, pkg.name, pkg.version].join('/')
+        },
+        use: {
+          expand: true,
+          cwd: '.build/dist',
+          src: '**/*.js',
+          dest: '.build/dist'
+        }
+      }
+    });
+    loadGlobalTasks('spm-build');
+
+    grunt.registerTask('build', [
+      'clean:build', 
+      'transport:src',
+      'concat:css',
+      'transport:css',
+      'concat:js',
+      'copy:build',
+      'cssmin:css',
+      'uglify:js',
+      'appenduse', // 在尾部添加 seajs.use 保证插件马上执行
+      'clean:dist',
+      'copy:dist',
+      'clean:build',
+    ]);
+  }
+
   function loadSubTasks(name) {
     var task = path.join(__dirname, 'node_modules', name, 'tasks');
     grunt.loadTasks(task);
+  }
+
+  function loadGlobalTasks(name) {
+    grunt.log.writeln('load ' + name);
+
+    var rootdir = getTaskRootDir(name);
+    if (!rootdir) {
+      grunt.log.error('Global task ' + name + ' not found.');
+      return;
+    }
+    var pkgfile = path.join(rootdir, 'package.json');
+    var pkg = grunt.file.exists(pkgfile) ? grunt.file.readJSON(pkgfile): {keywords: []};
+
+    var taskdir = path.join(rootdir, 'tasks');
+    // Process collection plugins
+    if (pkg.keywords && pkg.keywords.indexOf('gruntcollection') !== -1) {
+
+      Object.keys(pkg.dependencies).forEach(function(depName) {
+        // global task name should begin with grunt
+        if (!/^grunt/.test(depName)) return;
+        var filepath = path.join(rootdir, 'node_modules', depName);
+        if (grunt.file.exists(filepath)) {
+          // Load this task plugin recursively
+          grunt.loadGlobalTasks(name + '/node_modules/' + depName);
+        }
+      });
+      // Load the tasks of itself
+      if (grunt.file.exists(taskdir)) {
+        grunt.loadTasks(taskdir);
+      }
+      return;
+    }
+    if (grunt.file.exists(taskdir)) {
+      grunt.loadTasks(taskdir);
+    } else {
+      grunt.log.error('Global task ' + name + ' not found.');
+    }
+  }
+
+  function getTaskRootDir(name) {
+    var NODE_PATH = process.env.NODE_PATH;
+    if (!NODE_PATH) {
+      grunt.log.error('Environment variable required: "NODE_PATH"');
+      process.exit(1);
+    }
+
+    var nodePaths = NODE_PATH.split(process.platform == 'win32' ? ';' : ':');
+    for (var i = 0; i < nodePaths.length; i++) {
+      var rootDir = path.join(nodePaths[i], name);
+      if (grunt.file.exists(rootDir)) {
+        return rootDir;
+      }
+    }
+    return null;
   }
 };
