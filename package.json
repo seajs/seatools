@@ -3,6 +3,11 @@
   "version": "0.2.1",
   "author": "popomore <a@chuo.me>",
   "description": "Seajs helpers that can build, debug and test.",
+  "homepage": "https://github.com/seajs/seatools",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seajs/seatools.git"
+  },
   "dependencies": {
     "commander": "~1.1.1",
     "totoro": "~0.3.0",
