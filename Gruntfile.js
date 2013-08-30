@@ -187,7 +187,7 @@ module.exports = function(grunt) {
         var filepath = path.join(rootdir, 'node_modules', depName);
         if (grunt.file.exists(filepath)) {
           // Load this task plugin recursively
-          grunt.loadGlobalTasks(name + '/node_modules/' + depName);
+          loadGlobalTasks(name + '/node_modules/' + depName);
         }
       });
       // Load the tasks of itself
