@@ -143,7 +143,7 @@ module.exports = function(grunt) {
         }
       }
     });
-    loadGlobalTasks('spm-build');
+    loadSubTasks('spm-build');
 
     grunt.registerTask('build', [
       'clean:build', 
@@ -162,34 +162,28 @@ module.exports = function(grunt) {
   }
 
   function loadSubTasks(name) {
-    var task = path.join(__dirname, 'node_modules', name, 'tasks');
-    grunt.loadTasks(task);
-  }
-
-  function loadGlobalTasks(name) {
-    grunt.log.writeln('load ' + name);
-
-    var rootdir = getTaskRootDir(name);
-    if (!rootdir) {
-      grunt.log.error('Global task ' + name + ' not found.');
+    var basedir = path.join(__dirname, 'node_modules', name);
+    if (!basedir) {
+      grunt.log.error('task ' + name + ' not found.');
       return;
     }
-    var pkgfile = path.join(rootdir, 'package.json');
+    var pkgfile = path.join(basedir, 'package.json');
     var pkg = grunt.file.exists(pkgfile) ? grunt.file.readJSON(pkgfile): {keywords: []};
 
-    var taskdir = path.join(rootdir, 'tasks');
+    var taskdir = path.join(basedir, 'tasks');
     // Process collection plugins
     if (pkg.keywords && pkg.keywords.indexOf('gruntcollection') !== -1) {
 
       Object.keys(pkg.dependencies).forEach(function(depName) {
         // global task name should begin with grunt
         if (!/^grunt/.test(depName)) return;
-        var filepath = path.join(rootdir, 'node_modules', depName);
+        var filepath = path.join(basedir, 'node_modules', depName);
         if (grunt.file.exists(filepath)) {
           // Load this task plugin recursively
-          loadGlobalTasks(name + '/node_modules/' + depName);
+          loadSubTasks(name + '/node_modules/' + depName);
         }
       });
+
       // Load the tasks of itself
       if (grunt.file.exists(taskdir)) {
         grunt.loadTasks(taskdir);
@@ -199,24 +193,7 @@ module.exports = function(grunt) {
     if (grunt.file.exists(taskdir)) {
       grunt.loadTasks(taskdir);
     } else {
-      grunt.log.error('Global task ' + name + ' not found.');
+      grunt.log.error('task ' + name + ' not found.');
     }
-  }
-
-  function getTaskRootDir(name) {
-    var NODE_PATH = process.env.NODE_PATH;
-    if (!NODE_PATH) {
-      grunt.log.error('Environment variable required: "NODE_PATH"');
-      process.exit(1);
-    }
-
-    var nodePaths = NODE_PATH.split(process.platform == 'win32' ? ';' : ':');
-    for (var i = 0; i < nodePaths.length; i++) {
-      var rootDir = path.join(nodePaths[i], name);
-      if (grunt.file.exists(rootDir)) {
-        return rootDir;
-      }
-    }
-    return null;
   }
 };

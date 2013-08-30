@@ -15,7 +15,8 @@
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-watch": "~0.5.3",
     "grunt-contrib-connect": "~0.3.0",
-    "connect-livereload": " ~0.2.0"
+    "connect-livereload": " ~0.2.0",
+    "spm-build": "~0.3.9"
   },
   "bin": {
     "seatools": "bin/seatools"
