@@ -7,7 +7,8 @@ module.exports = function(grunt) {
     'dist/**/*',
     'src/**/*',
     'tests/**/*',
-    'examples/**/*'
+    'examples/**/*',
+    'CNAME'
   ];
 
   grunt.initConfig({
@@ -61,6 +62,13 @@ module.exports = function(grunt) {
           livereload: true
         }
       }
+    },
+
+    meta: {
+      site: {},
+      publish: {
+        options: {isPublish: true}
+      }
     }
   });
 
@@ -78,8 +86,9 @@ module.exports = function(grunt) {
     buildSeajs();
   }
   grunt.registerTask('test', ['totoro']);
-  grunt.registerTask('site', ['clean:site', 'copy', 'meta']);
+  grunt.registerTask('site', ['clean:site', 'copy', 'meta:site']);
   grunt.registerTask('site-watch', ['site', 'connect', 'watch']);
+  grunt.registerTask('site-publish', ['clean:site', 'copy', 'meta:publish', 'ghp-import']);
 
   function buildSeajs() {
     grunt.util._.merge(grunt.config.data, {
