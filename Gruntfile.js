@@ -88,7 +88,7 @@ module.exports = function(grunt) {
   grunt.registerTask('test', ['totoro']);
   grunt.registerTask('site', ['clean:site', 'copy', 'meta:site']);
   grunt.registerTask('site-watch', ['site', 'connect', 'watch']);
-  grunt.registerTask('site-publish', ['clean:site', 'copy', 'meta:publish', 'ghp-import']);
+  grunt.registerTask('publish', ['clean:site', 'copy', 'meta:publish', 'ghp-import']);
 
   function buildSeajs() {
     grunt.util._.merge(grunt.config.data, {

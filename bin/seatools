@@ -23,16 +23,20 @@ commander
   });
 
 commander
+  .command('publish')
+  .description('Publish to gh-pages')
+  .action(function(){
+    grunt.invoke('publish');
+  });
+
+commander
   .command('site')
   .description('Generate site and debug')
   .option('-w, --watch', 'Start a watch server')
-  .option('-p, --publish', 'Publish to gh-pages')
   .action(function(){
     var sub = this.args[0];
     if (sub.watch) {
       grunt.invoke('site-watch');
-    } else if (sub.publish) {
-      grunt.invoke('site-publish');
     } else {
       grunt.invoke('site');
     }
