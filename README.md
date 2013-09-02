@@ -38,6 +38,8 @@ $ seatools site -w
 
 ### 测试
 
+**测试之前需要先生成站点**
+
 用 phantom 测试 file 协议
 
 ```
@@ -55,6 +57,14 @@ $ seatools test --http
 ```
 $ totoro list
 $ seatools test --totoro
+```
+
+### 发布
+
+把站点发布到 gh-pages 中
+
+```
+$ seatools publish
 ```
 
 ### License
