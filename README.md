@@ -67,6 +67,11 @@ $ seatools test --totoro
 $ seatools publish
 ```
 
+## 资源
+
+- seatools 使用说明 https://github.com/seajs/seajs/issues/924
+- 插件开发的一些规则 https://github.com/seajs/seatools/issues/2
+
 ### License
 
 MIT
