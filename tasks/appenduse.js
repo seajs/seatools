@@ -9,7 +9,7 @@ module.exports = function(grunt) {
     var dest = this.data.dest;
     this.files.forEach(function(item) {
       var id = options.idleading + item.dest.replace(dest, '').replace('.js', '');
-      var data = format('\nseajs.use("%s");\n', id);
+      var data = format('\nseajs.require("%s");\n', id);
       fs.appendFileSync(path.resolve(item.dest), data);
     });
   });
