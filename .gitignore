@@ -16,3 +16,4 @@ node_modules
 sea-modules
 lib-cov
 coverage.html
+*.iml

@@ -1,77 +1,84 @@
 # Seatools
 
-> Seajs helpers that can build, debug and test.
+> Provide build, test and other tools for Sea.js developers.
 
----
 
-## 安装
+## Installation
 
 ```
 $ npm install seatools -g
 ```
 
-## 使用说明
 
-Seatools 是为了 seajs 和他的插件们能快速开发和调试而产生的。
+## Usage
 
-### 构建
+If you are a developer of Sea.js or its plugins, using seatools will bring
+a pleasant experience to boring coding work.
 
-seajs 本身的构建与插件略有不同，但插件们的构建方式应该要保持一致。
+
+### build
+
+Convert source files to distribution version through concatenating, compressing
+and some other processing steps.
 
 ```
 $ seatools build
 ```
 
-### 调试
 
-生成文档到 _site 目录
+### site
+
+Generate site files for debugging etc.
 
 ```
 $ seatools site
 ```
 
-起服务调试，支持 livereload，默认端口为 8000。
+Start a http server which support livereload watching. The default protocol is
+8000.
 
 ```
 $ seatools site -w
 ```
 
-### 测试
 
-**测试之前需要先生成站点**
+### test
 
-用 phantom 测试 file 协议
+Run test cases in various environment.
+
+NOTICE: please generate site before test.
+
+
+Test in localfile protocol under phantom environment.
 
 ```
 $ seatools test --local
 ```
 
-用 phantom 测试 http 协议
+Test in http protocol under phantom environment.
 
 ```
 $ seatools test --http
 ```
 
-用 totoro 测试跨浏览器，首先查看下是否有 server
+Using totoro to run test cases in http protocol under connected real browsers.
 
 ```
-$ totoro list
 $ seatools test --totoro
 ```
 
-### 发布
 
-把站点发布到 gh-pages 中
+### pages
+
+Publish site files to gh-pages branch.
 
 ```
-$ seatools publish
+$ seatools pages
 ```
 
-## 资源
 
-- seatools 使用说明 https://github.com/seajs/seajs/issues/924
-- 插件开发的一些规则 https://github.com/seajs/seatools/issues/2
+## References
 
-### License
+- <https://github.com/seajs/seajs/issues/924>
+- <https://github.com/seajs/seatools/issues/2>
 
-MIT

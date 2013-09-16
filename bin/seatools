@@ -6,18 +6,18 @@ var test = require('../lib/test');
 
 commander
   .version(require('../package.json').version)
-  .option('-v, --verbose', 'Show more infomation.');
+  .option('-v, --verbose', 'Show more information.');
 
 commander
   .command('build')
-  .description('Build seajs')
+  .description('Build sea.js')
   .action(function(){
     grunt.invoke('build');
   });
 
 commander
   .command('size')
-  .description('Get seajs file size')
+  .description('Get sea.js file size')
   .action(function(){
     grunt.invoke('size');
   });

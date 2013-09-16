@@ -1,4 +1,6 @@
+
 module.exports = function(grunt) {
+
   var path = require('path');
   var pkg = grunt.file.readJSON('package.json');
   var src = [
@@ -40,7 +42,7 @@ module.exports = function(grunt) {
           port: 8000,
           hostname: '*',
           base: '_site',
-          middleware: function(connect, options) {
+          'middleware': function(connect, options) {
             return [
               require('connect-livereload')(),
               connect.static(options.base),
@@ -67,7 +69,9 @@ module.exports = function(grunt) {
     meta: {
       site: {},
       publish: {
-        options: {isPublish: true}
+        options: {
+          isPublish: true
+        }
       }
     }
   });
@@ -166,7 +170,7 @@ module.exports = function(grunt) {
       'appenduse', // 在尾部添加 seajs.use 保证插件马上执行
       'clean:dist',
       'copy:dist',
-      'clean:build',
+      'clean:build'
     ]);
   }
 

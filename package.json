@@ -1,8 +1,8 @@
 {
   "name": "seatools",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "author": "popomore <a@chuo.me>",
-  "description": "Seajs helpers that can build, debug and test.",
+  "description": "Provide build, test and other tools for Sea.js developers.",
   "homepage": "https://github.com/seajs/seatools",
   "repository": {
     "type": "git",
