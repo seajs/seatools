@@ -29,7 +29,7 @@ module.exports = function(grunt) {
             .replace(/^|$/g, '"');
         });
 
-      scriptContent = format('testSuites = [%s]', files.join(','));
+      scriptContent = format('testSuites = [%s];', files.join(','));
     }
 
     // 发布的时候会把插件的测试用例也加上
