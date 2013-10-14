@@ -2,7 +2,6 @@
 
 var commander = require('commander');
 var grunt = require('../lib/grunt');
-var test = require('../lib/test');
 
 commander
   .version(require('../package.json').version)
@@ -51,14 +50,13 @@ commander
   .action(function(){
     var sub = this.args[0];
     if (sub.totoro) {
-      test.runTotoro();
+      grunt.invoke('test-totoro');
     } else if(sub.local) {
-      test.runLocal();
+      grunt.invoke('test-local');
     } else if(sub.http) {
-      test.runHttp();
+      grunt.invoke('test-http');
     } else {
-      test.runLocal();
-      test.runHttp();
+      grunt.invoke('test');
     }
   });
 

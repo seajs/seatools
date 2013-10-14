@@ -85,10 +85,13 @@ module.exports = function(grunt) {
   } else {
     buildSeajs();
   }
-  grunt.registerTask('test', ['totoro']);
   grunt.registerTask('site', ['clean:site', 'copy', 'meta:site']);
   grunt.registerTask('site-watch', ['site', 'connect', 'watch']);
   grunt.registerTask('publish', ['clean:site', 'copy', 'meta:publish', 'ghp-import']);
+  grunt.registerTask('test-totoro', ['site', 'totoro']);
+  grunt.registerTask('test-local', ['site', 'local']);
+  grunt.registerTask('test-http', ['site', 'http']);
+  grunt.registerTask('test', ['site', 'local', 'http']);
 
   function buildSeajs() {
     grunt.util._.merge(grunt.config.data, {
