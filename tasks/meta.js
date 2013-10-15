@@ -1,7 +1,7 @@
 module.exports = function(grunt) {
 
   grunt.registerMultiTask("meta", function() {
-    require('shelljs/global');
+    var shelljs = require('shelljs');
     var fs = require('fs');
     var path = require('path');
     var format = require('util').format;
@@ -19,7 +19,7 @@ module.exports = function(grunt) {
 
     // 插件则自动生成 meta
     else {
-      var files = find(path.resolve('./tests'))
+      var files = shelljs.find(path.resolve('./tests'))
         .filter(function(item) {
           return /test.html$/.test(item);
         }).map(function(item) {
@@ -32,13 +32,13 @@ module.exports = function(grunt) {
       scriptContent = format('testSuites = [%s];\n', files.join(','));
     }
 
-    var pkg = require(path.resolve('./package.json'));
+    var plugins, pkg = require(path.resolve('./package.json'));
 
     // 发布的时候会把插件的测试用例也加上
     if (options.isPublish) {
 
       if (!/^seajs-/.test(pkg.name) && pkg['seajs-plugin']) {
-        var plugins = pkg['seajs-plugin'].map(function(item) {
+        plugins = pkg['seajs-plugin'].map(function(item) {
           return format('/%s/tests/spec', item);
         });
         scriptContent += format('testSuites = testSuites.concat(%s);\n', JSON.stringify(plugins, null, 2));
@@ -47,15 +47,15 @@ module.exports = function(grunt) {
 
     // seajs 本地测试的时候把插件代码复制到 _site 下
     if (options.isTest && !/^seajs-/.test(pkg.name)) {
-      var plugins = fs.readdirSync(path.resolve('..'))
+      plugins = fs.readdirSync(path.resolve('..'))
         .filter(function(item) {
           return /^seajs-/.test(item);
         });
 
       plugins.forEach(function(item) {
         var pluginBase = path.resolve('../' + item);
-        cp('-rf', path.join(pluginBase, 'tests/spec/*'), path.resolve('./_site/tests/' + item));
-        cp('-rf', path.join(pluginBase, 'dist/*'), path.resolve('./_site/dist'));
+        shelljs.cp('-rf', path.join(pluginBase, 'tests/spec/*'), path.resolve('./_site/tests/' + item));
+        shelljs.cp('-rf', path.join(pluginBase, 'dist/*'), path.resolve('./_site/dist'));
       });
 
       scriptContent += format(
