@@ -29,12 +29,14 @@ module.exports = function(grunt) {
             .replace(/^|$/g, '"');
         });
 
-      scriptContent = format('testSuites = [%s]', files.join(','));
+      scriptContent = format('testSuites = [%s];\n', files.join(','));
     }
+
+    var pkg = require(path.resolve('./package.json'));
 
     // 发布的时候会把插件的测试用例也加上
     if (options.isPublish) {
-      var pkg = require(path.resolve('./package.json'));
+
       if (!/^seajs-/.test(pkg.name) && pkg['seajs-plugin']) {
         var plugins = pkg['seajs-plugin'].map(function(item) {
           return format('/%s/tests/spec', item);
@@ -44,7 +46,7 @@ module.exports = function(grunt) {
     }
 
     // seajs 本地测试的时候把插件代码复制到 _site 下
-    if (options.isTest) {
+    if (options.isTest && !/^seajs-/.test(pkg.name)) {
       var plugins = fs.readdirSync(path.resolve('..'))
         .filter(function(item) {
           return /^seajs-/.test(item);
