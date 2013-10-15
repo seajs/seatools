@@ -1,10 +1,10 @@
 module.exports = function(grunt) {
+  var fs = require('fs');
+  var path = require('path');
+  var format = require('util').format;
 
   grunt.registerMultiTask("meta", function() {
     var shelljs = require('shelljs');
-    var fs = require('fs');
-    var path = require('path');
-    var format = require('util').format;
 
     var options = this.options({
       isPublish: false,
@@ -15,6 +15,7 @@ module.exports = function(grunt) {
     // seajs 使用手动配置 meta
     if (fs.existsSync(path.resolve('./tests/meta.js'))) {
       scriptContent = fs.readFileSync(path.resolve('./tests/meta.js')).toString();
+      grunt.log.writeln('Generate testSuites from ./tests/meta.js');
     } 
 
     // 插件则自动生成 meta
@@ -30,44 +31,75 @@ module.exports = function(grunt) {
         });
 
       scriptContent = format('testSuites = [%s];\n', files.join(','));
+      grunt.log.writeln('Generate testSuites by scaning directory');
     }
 
     var plugins, pkg = require(path.resolve('./package.json'));
-
-    // 发布的时候会把插件的测试用例也加上
-    if (options.isPublish) {
-
-      if (!/^seajs-/.test(pkg.name) && pkg['seajs-plugin']) {
-        plugins = pkg['seajs-plugin'].map(function(item) {
-          return format('/%s/tests/spec', item);
+    // 只适用于 seajs 本身
+    if (!/^seajs-/.test(pkg.name)) {
+      // seajs 本地测试的时候把插件代码复制到 _site 下
+      if (options.isTest && !/^seajs-/.test(pkg.name)) {
+        plugins = fs.readdirSync(path.resolve('..'))
+          .filter(function(item) {
+            return /^seajs-/.test(item);
+          });
+  
+        plugins.forEach(function(item) {
+          var pluginBase = path.resolve('../' + item);
+          shelljs.cp('-rf', path.join(pluginBase, 'tests/spec/*'), path.resolve('./_site/tests/' + item));
+          shelljs.cp('-rf', path.join(pluginBase, 'dist/*'), path.resolve('./_site/dist'));
         });
-        scriptContent += format('testSuites = testSuites.concat(%s);\n', JSON.stringify(plugins, null, 2));
+  
+        scriptContent += format(
+          'testSuites = testSuites.concat(%s);\n',
+          JSON.stringify(plugins, null, 2)
+        );
+        grunt.log.writeln('Test mode, get ' + plugins.length + ' plugins from parent directory');
       }
-    }
 
-    // seajs 本地测试的时候把插件代码复制到 _site 下
-    if (options.isTest && !/^seajs-/.test(pkg.name)) {
-      plugins = fs.readdirSync(path.resolve('..'))
-        .filter(function(item) {
-          return /^seajs-/.test(item);
+      // 发布的时候会把插件的测试用例也加上
+      if (options.isPublish) {
+        var done = this.async();
+        var url = require('url');
+        var https = require('https');
+        var req = https.get('https://api.github.com/orgs/seajs/repos', function(res) {
+          var data = '';
+          res.on('data', function (chunk) {
+            data += chunk;
+          });
+          res.on('end', function() {
+            plugins = JSON.parse(data.toString())
+              .map(function(item) {
+                return item.name;
+              })
+              .filter(function(item) {
+                return /^seajs-/.test(item);
+              })
+              .map(function(item) {
+                return format('/%s/tests/spec', item);
+              });
+            scriptContent += format(
+              'testSuites = testSuites.concat(%s);\n',
+              JSON.stringify(plugins, null, 2)
+            );
+            grunt.log.writeln('Publish mode, get ' + plugins.length + ' plugins from github');
+            insertScript(scriptContent);
+            done();
+          });
         });
-
-      plugins.forEach(function(item) {
-        var pluginBase = path.resolve('../' + item);
-        shelljs.cp('-rf', path.join(pluginBase, 'tests/spec/*'), path.resolve('./_site/tests/' + item));
-        shelljs.cp('-rf', path.join(pluginBase, 'dist/*'), path.resolve('./_site/dist'));
-      });
-
-      scriptContent += format(
-        'testSuites = testSuites.concat(%s);\n',
-        JSON.stringify(plugins, null, 2)
-      );
+      } else {
+        insertScript(scriptContent);
+      }
+    } else {
+      insertScript(scriptContent);
     }
+  });
 
-    var script = format('<script>%s</script>', scriptContent);
+  function insertScript(content) {
+    var script = format('<script>%s</script>', content);
     var runner = path.resolve('./_site/tests/runner.html');
     var html = fs.readFileSync(runner).toString()
       .replace(/(<\/head>)/, script + '$1');
     fs.writeFileSync(runner, html);
-  });
+  }
 };
