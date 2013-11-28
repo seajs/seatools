@@ -46,9 +46,6 @@ $ seatools site -w
 
 Run test cases in various environment.
 
-NOTICE: please generate site before test.
-
-
 Test in localfile protocol under phantom environment.
 
 ```
@@ -68,12 +65,12 @@ $ seatools test --totoro
 ```
 
 
-### pages
+### publish
 
 Publish site files to gh-pages branch.
 
 ```
-$ seatools pages
+$ seatools publish
 ```
 
 
