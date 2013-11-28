@@ -62,7 +62,9 @@ module.exports = function(grunt) {
         var done = this.async();
         var url = require('url');
         var https = require('https');
-        var req = https.get('https://api.github.com/orgs/seajs/repos', function(res) {
+        var parsed = url.parse('https://api.github.com/orgs/seajs/repos');
+        parsed.setHeader('User-Agent', 'seajs');
+        var req = https.get(parsed, function(res) {
           var data = '';
           res.on('data', function (chunk) {
             data += chunk;

@@ -60,6 +60,10 @@ commander
     }
   });
 
+process.on('uncaughtException', function(err) {
+  console.log(err);
+});
+
 commander.parse(process.argv);
 
 var isExist = !commander.commands.every(function(item) {
