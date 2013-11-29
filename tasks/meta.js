@@ -63,7 +63,9 @@ module.exports = function(grunt) {
         var url = require('url');
         var https = require('https');
         var parsed = url.parse('https://api.github.com/orgs/seajs/repos');
-        parsed.setHeader('User-Agent', 'seajs');
+        parsed.headers = {
+          'User-Agent': 'seajs'
+        };
         var req = https.get(parsed, function(res) {
           var data = '';
           res.on('data', function (chunk) {
