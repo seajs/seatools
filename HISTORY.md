@@ -1,5 +1,9 @@
 # HISTORY.md
 
+## 0.4.1
+
+- #7 github need useAgent
+
 ## 0.4.0
 
 - #4 upgrade totoro to 0.4.0
