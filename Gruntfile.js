@@ -13,6 +13,13 @@ module.exports = function(grunt) {
     'CNAME'
   ];
 
+  var pluginSrc;
+  if (pkg.config && pkg.config['plugin-concat']) {
+    pluginSrc = pkg.config['plugin-concat'].map(function(item) {
+      return 'src/' + item;
+    });
+  }
+
   grunt.initConfig({
     pkg: pkg,
 
@@ -77,6 +84,16 @@ module.exports = function(grunt) {
         options: {
           isTest: true
         }
+      }
+    },
+
+    "build-plugin": {
+      options: {
+        idleading: pkg.family + '/' + pkg.name + '/' + pkg.version,
+        filename: pkg.name
+      },
+      plugin: {
+        src: pluginSrc || []
       }
     }
   });
@@ -153,14 +170,11 @@ module.exports = function(grunt) {
     var config = build.getConfig(options);
     grunt.util._.merge(grunt.config.data, config);
     grunt.util._.merge(grunt.config.data, {
-      appenduse: {
-        options: {
-          idleading: [pkg.family, pkg.name, pkg.version].join('/')
-        },
-        use: {
+      uglify: {
+        plugin: {
           expand: true,
-          cwd: '.build/dist',
-          src: '**/*.js',
+          cwd: '.build/tmp',
+          src: '*.js',
           dest: '.build/dist'
         }
       }
@@ -169,14 +183,8 @@ module.exports = function(grunt) {
 
     grunt.registerTask('build', [
       'clean:build', 
-      'transport:src',
-      'concat:css',
-      'transport:css',
-      'concat:js',
-      'copy:build',
-      'cssmin:css',
-      'uglify:js',
-      'appenduse', // 在尾部添加 seajs.use 保证插件马上执行
+      'build-plugin',
+      'uglify:plugin',
       'clean:dist',
       'copy:dist',
       'clean:build'
