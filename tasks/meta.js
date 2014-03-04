@@ -48,6 +48,9 @@ module.exports = function(grunt) {
           var pluginBase = path.resolve('../' + item);
           shelljs.cp('-rf', path.join(pluginBase, 'tests/spec/*'), path.resolve('./_site/tests/' + item));
           shelljs.cp('-rf', path.join(pluginBase, 'dist/*'), path.resolve('./_site/dist'));
+          if(item == 'seajs-debug') {
+            shelljs.cp('-r', path.join(pluginBase, 'src/store.js'), path.resolve('./_site/src/'));
+          }
         });
   
         scriptContent += format(
