@@ -51,6 +51,10 @@ module.exports = function(grunt) {
           if(item == 'seajs-debug') {
             shelljs.cp('-r', path.join(pluginBase, 'src/store.js'), path.resolve('./_site/src/'));
           }
+          var testHtml = path.resolve('./_site/tests/' + item + '/test.html');
+          var s = fs.readFileSync(testHtml, { encoding: 'utf-8' });
+          s = s.replace(/<script\s+[^>]+\/sea.js"><\/script>/, '<script src="../../dist/sea.js"></script>')
+          fs.writeFileSync(testHtml, s, { encoding: 'utf-8' });
         });
   
         scriptContent += format(
