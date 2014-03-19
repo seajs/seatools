@@ -19,6 +19,12 @@ module.exports = function(grunt) {
     grunt.file.write(minfile, code);
 
     grunt.log.writeln('File "' + minfile + '" fixed.');
+
+    minfile = "dist/sea-css.js";
+    var code = grunt.file.read(minfile) + "\n";
+    grunt.file.write(minfile, code);
+
+    grunt.log.writeln('File "' + minfile + '" fixed.');
   });
 
   grunt.registerTask("size", "Get file size", function() {
