@@ -123,7 +123,7 @@ module.exports = function(grunt) {
   function buildSeajs() {
     grunt.util._.merge(grunt.config.data, {
       concat: {
-        nocss: {
+        dist: {
           src: [
             'src/intro.js',
             'src/sea.js',
@@ -137,21 +137,6 @@ module.exports = function(grunt) {
             'src/outro.js'
           ],
           dest: 'dist/sea-debug.js'
-        },
-        withcss: {
-          src: [
-            'src/intro.js',
-            'src/sea.js',
-            'src/util-lang.js',
-            'src/util-events.js',
-            'src/util-path.js',
-            'src/util-request-css.js',
-            'src/util-deps.js',
-            'src/module.js',
-            'src/config.js',
-            'src/outro.js'
-          ],
-          dest: 'dist/sea-debug-css.js'
         }
       },
 
@@ -167,18 +152,6 @@ module.exports = function(grunt) {
               unused: false
             }
           }
-        },
-        seajswithcss: {
-          files: {
-            'dist/sea-css.js': ['dist/sea-debug-css.js']
-          },
-          options: {
-            banner: '/*! Sea.js with cssloader <%= pkg.version %> | seajs.org/LICENSE.md */\n',
-            compress: {
-              unsafe: true,
-              unused: false
-            }
-          }
         }
       }
     });
@@ -186,7 +159,6 @@ module.exports = function(grunt) {
       'concat',
       'post-concat',
       'uglify:seajs',
-      'uglify:seajswithcss',
       'post-uglify',
       'size'
     ]);
