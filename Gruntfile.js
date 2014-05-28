@@ -89,7 +89,7 @@ module.exports = function(grunt) {
 
     "build-plugin": {
       options: {
-        idleading: pkg.family + '/' + pkg.name + '/' + pkg.version,
+        idleading: (pkg.family ? pkg.family : (pkg.name.indexOf('-') > 0 ? pkg.name.match(/([^-]+)-/)[1] : '')) + '/' + pkg.name + '/' + pkg.version,
         filename: pkg.name
       },
       plugin: {
