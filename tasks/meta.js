@@ -53,7 +53,8 @@ module.exports = function(grunt) {
           }
           var testHtml = path.resolve('./_site/tests/' + item + '/test.html');
           var s = fs.readFileSync(testHtml, { encoding: 'utf-8' });
-          s = s.replace(/<script\s+[^>]+\/sea.js"><\/script>/, '<script src="../../dist/sea.js"></script>')
+          s = s.replace(/<script\s+[^>,]+\/sea\.js"><\/script>/, '<script src="../../dist/sea.js"></script>');
+          s = s.replace(/<script\s+[^>,]+\/seajs-(\w+?)\.js"><\/script>/, '<script src="../../dist/seajs-$1.js"></script>');
           fs.writeFileSync(testHtml, s, { encoding: 'utf-8' });
         });
   
