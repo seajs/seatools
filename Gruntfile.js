@@ -137,13 +137,18 @@ module.exports = function(grunt) {
             'src/outro.js'
           ],
           dest: 'dist/sea-debug.js'
+        },
+        standalone: {
+          src: ['src/standalone.js'],
+          dest: 'dist/standalone-debug.js'
         }
       },
 
       uglify: {
         seajs: {
           files: {
-            'dist/sea.js': ['dist/sea-debug.js']
+            'dist/sea.js': ['dist/sea-debug.js'],
+            'dist/standalone.js': ['dist/standalone-debug.js']
           },
           options: {
             banner: '/*! Sea.js <%= pkg.version %> | seajs.org/LICENSE.md */\n',
