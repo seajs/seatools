@@ -131,6 +131,7 @@ module.exports = function(grunt) {
             'src/util-events.js',
             'src/util-path.js',
             'src/util-request.js',
+            'src/util-cs.js',
             'src/util-deps.js',
             'src/module.js',
             'src/config.js',
@@ -141,6 +142,21 @@ module.exports = function(grunt) {
         standalone: {
           src: ['src/standalone.js'],
           dest: 'dist/standalone-debug.js'
+        },
+        runtime: {
+          src: [
+            'src/intro.js',
+            'src/sea.js',
+            'src/util-lang.js',
+            'src/util-events.js',
+            'src/util-path.js',
+            'src/util-request.js',
+            'src/runtime-deps.js',
+            'src/module.js',
+            'src/config.js',
+            'src/outro.js'
+          ],
+          dest: 'dist/runtime-debug.js'
         }
       },
 
@@ -148,7 +164,8 @@ module.exports = function(grunt) {
         seajs: {
           files: {
             'dist/sea.js': ['dist/sea-debug.js'],
-            'dist/standalone.js': ['dist/standalone-debug.js']
+            'dist/standalone.js': ['dist/standalone-debug.js'],
+            'dist/runtime.js': ['dist/runtime-debug.js']
           },
           options: {
             banner: '/*! Sea.js <%= pkg.version %> | seajs.org/LICENSE.md */\n',

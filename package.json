@@ -1,6 +1,6 @@
 {
   "name": "seatools",
-  "version": "0.5.10",
+  "version": "0.5.11",
   "author": "popomore <a@chuo.me>",
   "description": "Provide build, test and other tools for Sea.js developers.",
   "homepage": "https://github.com/seajs/seatools",
