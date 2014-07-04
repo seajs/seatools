@@ -151,7 +151,6 @@ module.exports = function(grunt) {
             'src/util-events.js',
             'src/util-path.js',
             'src/util-request.js',
-            'src/runtime-deps.js',
             'src/module.js',
             'src/config.js',
             'src/outro.js'
